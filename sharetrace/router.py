@@ -5,6 +5,7 @@ from typing import Callable, Optional
 PLATFORM_PATTERNS = [
     (r'(vm\.tiktok\.com|vt\.tiktok\.com|tiktok\.com/t)/[A-Za-z0-9]+', 'tiktok'),
     (r'chatgpt\.com/share/[a-f0-9-]+', 'chatgpt'),
+    (r'claude\.ai/share/[a-f0-9-]+', 'claude'),
     (r'(discord\.com/invite|discord\.gg)/[a-zA-Z0-9]+', 'discord'),
     (r'instagram\.com/(reel|p)/[A-Za-z0-9_-]+', 'instagram'),
     (r'sharepoint\.com/:[a-z]:/g/personal/[^/]+/', 'microsoft'),
@@ -26,6 +27,7 @@ PARSERS = {
     'substack': 'substack',
     'suno': 'suno',
     'telegram': 'telegram',
+    'claude': 'claude',
 }
 
 
