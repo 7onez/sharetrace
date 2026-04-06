@@ -23,7 +23,7 @@ python -m sharetrace --list
 ## ⚙️ Installation
 
 ```bash
-git clone https://github.com/loaded/sharetrace.git
+git clone https://github.com/soxoj/sharetrace.git
 cd sharetrace
 pip install -r requirements.txt
 ```
@@ -33,7 +33,7 @@ pip install -r requirements.txt
 | Name                | Extracts | Notes |
 | ------------------- | -------- | ----- |
 | [TikTok](https://tiktok.com)              | User ID, Username, Nickname, Country, Avatar, Signature, Device, Share Method, Timestamp, Follower/Following/Video/Heart Counts, Private Account, DM Available | Requires short share link (`vm.tiktok.com` / `vt.tiktok.com`) |
-| [Instagram](https://instagram.com)        | Username, User ID, Display Name, Profile URL, Profile Pic | Sharer data expires within ~24 hours; only fresh share links contain identity info |
+| [Instagram](https://instagram.com)        | Username, User ID, Display Name, Profile URL, Profile Pic | Sharer data might expire within a few days; only fresh share links contain identity info |
 | [Discord](https://discord.com)            | User ID, Username, Display Name, Avatar, Creation Time | Vanity invites may not contain inviter data |
 | [ChatGPT](https://chatgpt.com)            | Display Name | |
 | [Claude](https://claude.ai)               | Display Name, User ID | |
