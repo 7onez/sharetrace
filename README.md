@@ -48,6 +48,10 @@ pip install -r requirements.txt
 
 A self-hosted Flask wrapper with a browser UI is available: [voelspriet/sharetrace-web](https://github.com/voelspriet/sharetrace-web) — live demo at <https://share.whopostedwhat.com>. Maintained separately; all extraction logic still lives in this repo.
 
+<p align="center">
+  <img width="700" alt="Screenshot of share.whopostedwhat.com" src="https://github.com/user-attachments/assets/54d5ee25-0a73-457b-aa8b-4bf7a6a90c24" />
+</p>
+
 ## 😊 SOWEL classification
 This tool uses the following OSINT techniques:
 - [SOTL-1.4. Analyze Internal Identifiers](https://sowel.soxoj.com/internal-identifiers)
