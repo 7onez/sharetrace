@@ -16,7 +16,7 @@
 <p>
   <a href="https://github.com/7onez/sharetrace"><img src="https://img.shields.io/badge/version-fork-0080ff?style=for-the-badge&logo=git&logoColor=white" alt="Fork"></a>&nbsp;
   <a href="https://github.com/soxoj/sharetrace"><img src="https://img.shields.io/badge/upstream-soxoj%2Fsharetrace-0080ff?style=for-the-badge&logo=github&logoColor=white" alt="Upstream soxoj/sharetrace"></a>&nbsp;
-  <a href="#supported-sources"><img src="https://img.shields.io/badge/sources-13-ff6d00?style=for-the-badge&logo=searchengin&logoColor=white" alt="13 sources"></a>&nbsp;
+  <a href="#supported-sources"><img src="https://img.shields.io/badge/sources-16-ff6d00?style=for-the-badge&logo=searchengin&logoColor=white" alt="16 sources"></a>&nbsp;
   <a href="#installation"><img src="https://img.shields.io/badge/API_keys-none-00bfa5?style=for-the-badge&logo=shield&logoColor=white" alt="No API keys"></a>
 </p>
 
@@ -49,7 +49,10 @@ All upstream functionality preserved. Additions over [soxoj/sharetrace](https://
 |----------|--------|-------|
 | **Google Docs source** (`gdoc`) | Docs, Sheets, Slides, Drawings, Forms, Drive files, Apps Script, Jamboard, My Maps | Owner email + Google ID + creation/modification dates from the public Drive `v2beta` metadata endpoint. API key overridable via `SHARETRACE_GDOC_API_KEY`. Clean-room rewrite against the endpoint first documented by [Malfrats/xeuledoc](https://github.com/Malfrats/xeuledoc) |
 | **GitHub source** (`github`) | Commit URLs, PR-commit URLs, profile URLs | Commit: parses `.patch` mbox `From:` header with RFC 5322 parser (handles quoted display names). Profile: scans recent public PushEvents (last 90 days). `users.noreply.github.com` emails flagged via `is_noreply` |
-| **28 new tests** | Router + `gdoc` + `github` modules | Mocked unit tests + live-verified against real public documents and commits |
+| **GitLab source** (`gitlab`) | Commit URLs (incl. nested groups), profile URLs | Commit: `.patch` mbox `From:` header, same trick as GitHub. Profile: `/api/v4/users` — returns `public_email` only if user opted in (GitLab strips email from push events, unlike GitHub). gitlab.com only; self-hosted out of scope |
+| **Hugging Face source** (`huggingface`) | Profile URLs, repo URLs (owner resolved) | Uses undocumented-but-stable `/api/users/<name>/overview`. Returns username, fullname, avatar, account type (user/org), follower count, orgs list. No email (HF treats emails as private) |
+| **LinkedIn source** (`linkedin`) | `/in/`, `/posts/`, `/pulse/` URLs | OG-tag scrape with realistic Chromium UA. Detects LinkedIn's bot protection (999/403/429 status, `authwall` keyword) and returns `is_blocked: True`. Hit rate ~80% on public profiles; dynamic and degrades over time |
+| **50+ new tests** | Router + `gdoc` + `github` + `gitlab` + `huggingface` + `linkedin` modules | Mocked unit tests + live-verified against real public resources |
 
 <br>
 
@@ -122,6 +125,9 @@ python -m sharetrace "https://chatgpt.com/share/<uuid>"
 | [Telegram](https://telegram.org)          | User ID | Decoded from joinchat link hash; no HTTP request needed. Links starting with `AAAAA` decode to user_id=0 and contain no useful data |
 | **[Google Docs](https://docs.google.com)** ★ | Owner Email, Name, Google ID, Avatar, Creation Date, Last Edit, Public Permissions | Works for Docs, Sheets, Slides, Drawings, Forms, Drive files, Apps Script, Jamboard, My Maps. Requires document to be publicly shared. API key overridable via `SHARETRACE_GDOC_API_KEY` |
 | **[GitHub](https://github.com)** ★        | Email, Name, Commit SHA, Repo (commit URL); Username, Emails list (profile URL) | Commit URL: parses `.patch` mbox `From:` header. Profile URL: scans recent public PushEvents (last 90 days). `users.noreply.github.com` emails flagged. Profile route subject to GitHub's 60/hr unauth rate limit |
+| **[GitLab](https://gitlab.com)** ★        | Email, Name, Commit SHA, Project (commit URL); Username, Display name, Avatar, User ID, `public_email` (profile URL) | Commit URL uses same `.patch` trick as GitHub, handles nested groups. Profile returns `public_email` only when user opted in (GitLab strips push-event emails). gitlab.com only; self-hosted out of scope |
+| **[Hugging Face](https://huggingface.co)** ★ | Username, Fullname, Avatar, Account type (user/org), Follower count, Orgs list | Uses undocumented-but-stable `/api/users/<name>/overview`. Repo URLs resolve to owner. No email (HF privacy default). Denylist prevents service pages (`spaces`, `datasets`, etc.) from being treated as profiles |
+| **[LinkedIn](https://linkedin.com)** ★    | Display name, Headline, Profile URL, Avatar (OG tags) | Covers `/in/`, `/posts/`, `/pulse/` URLs. Hit rate ~80% on high-profile public accounts; lower / degrading over time as LinkedIn tightens bot defenses. Blocked fetches honestly return `{"error": "...", "is_blocked": true}` — callers should expect this |
 
 ★ = added in this fork
 
