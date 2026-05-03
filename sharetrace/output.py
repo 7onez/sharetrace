@@ -41,6 +41,7 @@ PLATFORM_NAMES = {
     'substack': 'Substack',
     'telegram': 'Telegram',
     'suno': 'Suno',
+    'claude': 'Claude',
     'gdoc': 'Google Docs',
     'github': 'GitHub',
     'notion': 'Notion',
